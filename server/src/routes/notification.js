@@ -13,10 +13,10 @@ router.post('/sendNotification', checkLog(), asyncHandler(async(req, res) => {
   let receiver = req.body.receiver;
   let text = req.body.text;
   if (!receiver || !ObjectId.isValid(receiver))
-    return res.status(400).send('Error');
+    return res.status(203).send('Error');
   receiver = await UserModel.findOne({_id: receiver});
   if (!receiver)
-    return res.status(400).send('User doesn\'t exist');
+    return res.status(203).send('User doesn\'t exist');
   let block = await BlockModel.findOne({
     $or: [
       {blocker: receiver._id, blocked: userId},
@@ -24,8 +24,8 @@ router.post('/sendNotification', checkLog(), asyncHandler(async(req, res) => {
     ]
   });
   if (block)
-      return res.status(400).send('Error, you were blocked by this person');
-  notification = new NotificationModel();
+      return res.status(203).send('Error, you were blocked by this person');
+  let notification = new NotificationModel();
   notification.notifier = userId;
   notification.notified = receiver._id;
   notification.notification = text;
@@ -38,7 +38,7 @@ router.post('/checkNotifications', checkLog(), asyncHandler(async(req, res) => {
   let userId = req.user;
   let user = await UserModel.findOne({_id: userId});
   if (!user)
-    return res.status(400).send('Error');
+    return res.status(203).send('Error');
   user.last_log = Date.now();
   await user.save();
   let notifications = await NotificationModel.find({notified: userId, seen: false});

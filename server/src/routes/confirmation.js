@@ -9,15 +9,15 @@ let Token = require('../models/registrationToken');
 router.post('/', asyncHandler(async(req, res) => {
   let tokenNumber = req.body.token;
   if (!tokenNumber)
-    return res.status(400).send('No token was found');
+    return res.status(203).send('No token was found');
   let token = await Token.findOne({token:tokenNumber});
   if (!token)
-    return res.status(400).send('Token wasn\'t found');
+    return res.status(203).send('Token wasn\'t found');
   let userToVerify = await User.findOne({_id:token._userId});
   if (!userToVerify)
-    return res.status(400).send('User couldn\'t be found');
+    return res.status(203).send('User couldn\'t be found');
   if (userToVerify.isVerified === true)
-    return res.status(400).send('This user is already verified');
+    return res.status(203).send('This user is already verified');
   userToVerify.isVerified = true;
   await userToVerify.save();
   res.status(200).send('The user was verified');

@@ -30,20 +30,20 @@ router.post('/', asyncHandler(async(req, res) => {
   let passwordConfirmation = req.body.passwordConfirmation;
 
   if (!username || !emailAddress || !password)
-    res.status(400).send("One of the field is missing");
+    res.status(203).send("One of the field is missing");
   else if (password !== passwordConfirmation)
-    res.status(400).send("The passwords aren't identicals");
+    res.status(203).send("The passwords aren't identicals");
   else if (password.length <= 6)
-    res.status(400).send("The password is too short");
+    res.status(203).send("The password is too short");
   else if (!checkEmailValidity(emailAddress))
-    res.status(400).send("Email address is invalid")
+    res.status(203).send("Email address is invalid")
   else {
     let usernameExists = await User.findOne({username: username});
     let emailAddressExist = await User.findOne({emailAddress:emailAddress})
     if (usernameExists)
-      res.status(400).send("This username is already in use");
+      res.status(203).send("This username is already in use");
     else if (emailAddressExist)
-      res.status(400).send("This emailAddress is already in use");
+      res.status(203).send("This emailAddress is already in use");
     else {
       let user = new User();
       user.username = username;

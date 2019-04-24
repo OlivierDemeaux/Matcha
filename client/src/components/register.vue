@@ -41,7 +41,7 @@ export default {
       password: '',
       passwordConfirmation: '',
       error: null,
-      success: null
+      success: null,
     }
   },
   methods: {
@@ -54,9 +54,13 @@ export default {
         password: this.password,
         passwordConfirmation: this.passwordConfirmation
       }, {emulateJSON: true}).then((response) => {
-        this.success = response.body;
-        this.$store.dispatch('setToken', response.data.token)
-        this.$store.dispatch('setUser', response.data.user)
+        if (response.status == 203) {
+          this.error = response.body
+        } else {
+          this.success = response.body;
+          this.$store.dispatch('setToken', response.data.token)
+          this.$store.dispatch('setUser', response.data.user)
+        }
       }, (err) => {
         this.error = err.body
       })

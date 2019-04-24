@@ -12,7 +12,7 @@ router.post('/', checkLog(), asyncHandler(async(req, res) => {
   let userId = req.user;
   let user = await UserModel.findOne({_id: userId}).lean();
   if (!user)
-    return res.status(400).send('User doesn\'t exist');
+    return res.status(203).send('User doesn\'t exist');
 
   let likes = await LikesModel.find({liker: user._id});
   let matchs = [];
@@ -35,7 +35,7 @@ router.post('/checkIfMatch', checkLog(), asyncHandler(async(req, res) => {
   let receiver = req.body.receiver;
   let user = await UserModel.findOne({_id: userId}).lean();
   if (!user)
-    return res.status(400).send('User doesn\'t exist');
+    return res.status(203).send('User doesn\'t exist');
   let liked = await LikesModel.findOne({liker: receiver, liked: userId});
   if (liked) {
     let like = await LikesModel.findOne({liker: userId, liked: receiver});

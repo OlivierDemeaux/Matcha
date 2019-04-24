@@ -74,7 +74,12 @@ export default {
       interestedIn: this.interestedIn,
       lookingFor: this.lookingFor
     },  {emulateJSON: true}).then((res) => {
-      this.errRes = res
+      if (res.status == 203) {
+        this.errRes = res.body
+        this.showResErr = true
+      } else {
+        this.errRes = res
+      }
     }, (err) => {
       this.errRes = err
       this.showResErr = true

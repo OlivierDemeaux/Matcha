@@ -56,6 +56,7 @@ export default {
   methods: {
     startNotif() {
       let token = this.$localStorage.get('token')
+      clearInterval(this.interval);
       if (token) {
         let vm = this;
         this.interval = setInterval(function(){ vm.getNotification();}, 2000);
@@ -94,12 +95,17 @@ export default {
       this.$http.post('notification/checkNotifications', {
         token: this.$store.state.token
       }, {emulateJSON: true}).then((res) => {
-        this.notifications = res.body
-        if (this.notifications.length > 0)
-          this.unreadNotification = true
-        else {
-          this.unreadNotification = false
-          this.showNotif = false
+        if (res.status == 203) {
+          this.error = res.body
+          this.showError = true
+        } else {
+          this.notifications = res.body
+          if (this.notifications.length > 0)
+            this.unreadNotification = true
+          else {
+            this.unreadNotification = false
+            this.showNotif = false
+          }
         }
       }, (err) => {
         this.error = err

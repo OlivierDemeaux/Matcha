@@ -31,10 +31,10 @@ router.post('/login', asyncHandler(async(req, res) => {
 
     let usernameExists = await UserModel.findOne({username: username});
     if (!usernameExists)
-        return res.status(400).send('login fail');
+        return res.status(203).send('login fail');
     const isPasswordRight = await bcrypt.compare(password, usernameExists.password);
     if (!isPasswordRight) {
-        res.status(400).send('login fail');
+        res.status(203).send('login fail');
         return ;
     }
     else {

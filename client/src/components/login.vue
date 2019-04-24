@@ -50,10 +50,14 @@ export default {
         username: this.username,
         password: this.password,
       }, {emulateJSON: true}).then((res) => {
-        this.success = res.body.msg;
-        this.$store.commit('SET_TOKEN', res.body.token);
-        this.$localStorage.set('token', res.body.token);
-        this.$router.push({name: "profil"});
+        if (res.status == 203) {
+          this.error = res.body
+        } else {
+          this.success = res.body.msg;
+          this.$store.commit('SET_TOKEN', res.body.token);
+          this.$localStorage.set('token', res.body.token);
+          this.$router.push({name: "profil"});
+        }
       }, (err) => {
         this.error = err.body;
       })

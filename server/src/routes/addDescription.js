@@ -11,7 +11,7 @@ router.post('/', checkLog(), asyncHandler(async(req, res) => {
   let description = req.body.descriptionToBeAdded;
   let user = await UserModel.findOne({_id: userId});
   if (!user || !description)
-    return res.status(400).send('User doesn\'t exist');
+    return res.status(203).send('User doesn\'t exist');
   else {
     user.description = sanitizeHtml(description);
     await user.save();

@@ -13,7 +13,7 @@ router.post('/add', checkLog(), asyncHandler(async(req, res) => {
   let userId = req.user;
   let tag = req.body.tag;
   if (!tag)
-    return res.status(400).send('Error');
+    return res.status(203).send('Error');
   tag = sanitizeHtml(tag.toString());
   let tagExists = await TagModel.findOne({tag: tag});
   if (!tagExists) {
@@ -23,7 +23,7 @@ router.post('/add', checkLog(), asyncHandler(async(req, res) => {
   }
   let linkExists = await LinkModel.findOne({user: userId, tag: tagExists._id});
   if (linkExists)
-    return res.status(400).send('Error');
+    return res.status(203).send('Error');
   let link = new LinkModel();
   link.tag = tagExists._id;
   link.user = userId;
@@ -35,14 +35,14 @@ router.post('/remove', checkLog(), asyncHandler(async(req, res) => {
   let userId = req.user;
   let tag = req.body.tag;
   if (!tag)
-    return res.status(400).send('Error');
+    return res.status(203).send('Error');
   tag = sanitizeHtml(tag.toString());
   let tagExists = await TagModel.findOne({tag: tag});
   if (!tagExists)
-    return res.status(400).send('that tag doesn\'t exists');
+    return res.status(203).send('that tag doesn\'t exists');
   let linkExists = await LinkModel.findOne({user: userId, tag: tagExists._id});
   if (!linkExists)
-    return res.status(400).send('the link wasn\'t found');
+    return res.status(203).send('the link wasn\'t found');
   await linkExists.remove();
   linkExists = await LinkModel.findOne({tag: tagExists._id});
   if (!linkExists)

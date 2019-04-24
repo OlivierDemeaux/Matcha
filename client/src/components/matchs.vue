@@ -95,7 +95,12 @@ export default {
       this.$http.post('getUser', {
         token: this.token
       }, {emulateJSON: true}).then((res) => {
-        this.user = res.body;
+        if (res.status == 203) {
+          this.error = res.body
+          this.showError = true
+        } else {
+          this.user = res.body;
+        }
       }, (err) => {
         this.error = err
         this.showError = true
@@ -117,7 +122,13 @@ export default {
         this.$http.post('getMatchs', {
           token: this.token
         }, {emulateJSON: true}).then((res) => {
+          if (res.status == 203) {
+            this.error = res.body
+            this.showError = true
+          }
+          else {
           this.matchs = res.body;
+        }
         }, (err) => {
           this.error = err
           this.showError = true

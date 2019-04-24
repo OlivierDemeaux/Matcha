@@ -264,7 +264,7 @@ button.navbar-button {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 200px;
+  width: 230px;
   max-width: 300px;
   background-color: grey;
   height: auto;

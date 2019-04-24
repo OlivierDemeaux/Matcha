@@ -32,7 +32,7 @@ router.post('/', checkLog(), asyncHandler(async(req, res) => {
   let userId = req.user;
   let user = await UserModel.findOne({_id: userId}).lean();
   if (!user)
-    return res.status(400).send('User doesn\'t exist');
+    return res.status(203).send('User doesn\'t exist');
   let max_dist = req.body.max_dist;
   let max_age = user.age + 5;
   let min_age = user.age - 5;
@@ -90,7 +90,7 @@ router.post('/advancedSearch', checkLog(), asyncHandler(async(req, res) => {
   let userId = req.user;
   let user = await UserModel.findOne({_id: userId}).lean();
   if (!user)
-    return res.status(400).send('User doesn\'t exist');
+    return res.status(203).send('User doesn\'t exist');
   let max_dist = req.body.max_dist;
   let max_age = req.body.max_age;
   if (max_age == '')

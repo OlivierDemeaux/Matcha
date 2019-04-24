@@ -184,13 +184,18 @@ methods: {
     this.$http.post('getUser', {
       token: this.token
     }, {emulateJSON: true}).then((res) => {
-      this.user = res.body;
-      if (this.user.latitude && this.user.longitude && this.map === null)
-        setTimeout(function(){ this.setMap() }.bind(this), 1000);
-      else if (this.user.latitude && this.user.longitude)
-        this.setPosition();
-      else
-        this.getIP();
+      if (res.status == 203) {
+        this.error = res.body
+        this.showError = true
+      } else {
+        this.user = res.body;
+        if (this.user.latitude && this.user.longitude && this.map === null)
+          setTimeout(function(){ this.setMap() }.bind(this), 1000);
+        else if (this.user.latitude && this.user.longitude)
+          this.setPosition();
+        else
+          this.getIP();
+      }
     }, (err) => {
       this.error = err
       this.showError = true
@@ -202,7 +207,12 @@ methods: {
         token: this.token,
         ip: res.body.ip
       }, {emulateJSON: true}).then((res) => {
-        this.getUser();
+        if (res.status == 203) {
+          this.error = res.body
+          this.showError = true
+        } else {
+          this.getUser();
+        }
       }, (err) => {
         this.error = err
         this.showError = true
@@ -239,8 +249,14 @@ methods: {
       descriptionToBeAdded : this.descriptionToBeAdded,
       token: this.token
     }, {emulateJSON: true}).then((res) => {
+      if (res.status == 203) {
+        this.error = res.body
+        this.showError = true
+      }
+      else {
       this.getUser();
       this.changeDescription = false;
+    }
     }, (err) => {
       this.error = err
       this.showError = true
@@ -252,8 +268,13 @@ methods: {
     age: this.age,
     interestedIn: this.interestedIn,
     token: this.token
-  },  {emulateJSON: true}).then((response) => {
-    this.getUser();
+  },  {emulateJSON: true}).then((res) => {
+    if (res.status == 203) {
+      this.error = res.body
+      this.showError = true
+    } else {
+      this.getUser();
+    }
   }, (err) => {
     this.error = err
     this.showError = true
@@ -267,8 +288,13 @@ methods: {
     formData.append('myFile', this.selectedFile)
     formData.append('token', this.token)
     formData.append('number', this.modifyImage)
-    this.$http.post('updateUser/uploadPicture', formData, {headers: {'Content-Type': 'multipart/form-data'}}).then((response) => {
-      this.getUser();
+    this.$http.post('updateUser/uploadPicture', formData, {headers: {'Content-Type': 'multipart/form-data'}}).then((res) => {
+      if (res.status == 203) {
+        this.error = res.body
+        this.showError = true
+      } else {
+        this.getUser()
+        }
       }, (err) => {
         this.error = err
         this.showError = true
@@ -286,7 +312,12 @@ methods: {
       token: this.token,
       number: this.modifyImage,
     }, {emulateJSON: true}).then((res) => {
-      this.getUser();
+      if (res.status == 203) {
+        this.error = res.body
+        this.showError = true
+      } else {
+        this.getUser();
+      }
     }, (err) => {
       this.error = err.body;
     })
@@ -299,7 +330,12 @@ methods: {
       token: this.token,
       tag: this.tag,
     }, {emulateJSON: true}).then((res) => {
-      this.getUser();
+      if (res.status == 203) {
+        this.error = res.body
+        this.showError = true
+      } else {
+        this.getUser()
+      }
     }, (err) => {
       this.error = err.body;
     })
@@ -309,7 +345,12 @@ methods: {
       token: this.token,
       tag: tag,
     }, {emulateJSON: true}).then((res) => {
-      this.getUser();
+      if (res.status == 203) {
+        this.error = res.body
+        this.showError = true
+      } else {
+        this.getUser()
+      }
     }, (err) => {
       this.error = err.body;
     })

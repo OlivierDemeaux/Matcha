@@ -73,8 +73,13 @@ export default {
       this.$http.post('getUser', {
         token: this.token
       }, {emulateJSON: true}).then((res) => {
-        this.user = res.body;
-        this.me = this.user._id;
+        if (res.status == 203) {
+          this.error = res.body
+          this.showError = true
+        } else {
+          this.user = res.body;
+          this.me = this.user._id;
+        }
       }, (err) => {
         this.error = err
         this.showError = true
@@ -97,12 +102,17 @@ export default {
           text: this.text,
           receiver: this.userToShow._id
         }, {emulateJSON: true}).then((res) => {
-          this.messages = res.body;
-          this.notification = this.user.firstName + ' sent you a message';
-          this.sendNotification();
-          this.text = '';
-          this.getMessages();
-          this.scrollToBottom()
+          if (res.status == 203) {
+            this.error = res.body
+            this.showError = true
+          } else {
+            this.messages = res.body;
+            this.notification = this.user.firstName + ' sent you a message';
+            this.sendNotification();
+            this.text = '';
+            this.getMessages();
+            this.scrollToBottom()
+          }
         }, (err) => {
           this.error = err
           this.showError = true
@@ -114,7 +124,12 @@ export default {
           receiver: this.userToShow._id,
           text: this.notification
         }, {emulateJSON: true}).then((res) => {
-          this.showError = false
+          if (res.status == 203) {
+            this.error = res.body
+            this.showError = true
+          } else {
+            this.showError = false
+          }
         }, (err) => {
           this.error = err
           this.showError = true
@@ -142,16 +157,21 @@ export default {
           token: this.token,
           receiver: this.userToShow._id
         }, {emulateJSON: true}).then((res) => {
-          if (res.body.length == 0)
-            this.convoIsEmpty = true;
-          this.messagesFromConvo = res.body
+          if (res.status == 203) {
+            this.error = res.body
+            this.showError = true
+          } else {
+            if (res.body.length == 0)
+              this.convoIsEmpty = true;
+            this.messagesFromConvo = res.body
 
-          if(this.first) {
-            this.$nextTick(function() {
-              this.scrollToBottom()
-            })
+            if(this.first) {
+              this.$nextTick(function() {
+                this.scrollToBottom()
+              })
+            }
+            this.first = false;
           }
-          this.first = false;
         }, (err) => {
           this.error = err
           this.showError = true

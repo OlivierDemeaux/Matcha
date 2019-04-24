@@ -33,10 +33,10 @@ router.post('/', asyncHandler(async(req, res) => {
           }
         });
       } else {
-        res.status(400).send("Password is incorrect");
+        res.status(203).send("Password is incorrect");
       }
     } else {
-      res.status(400).send("This user doesn't exist");
+      res.status(203).send("This user doesn't exist");
     };
 }));
 
@@ -48,7 +48,7 @@ router.post('/registerInformations', checkLog(), asyncHandler(async(req, res) =>
   let interestedIn = req.body.interestedIn;
   let user = await User.findOne({_id: userId});
   if (!user)
-    return res.status(400).send('User doesn\'t exist');
+    return res.status(203).send('User doesn\'t exist');
   else {
     user.gender = gender;
     user.age = age;
@@ -66,7 +66,7 @@ router.post('/resetInformation', checkLog(), asyncHandler(async(req, res) => {
   let lookingFor = null;
   let user = await User.findOne({_id: userId});
   if (!user)
-    return res.status(400).send('User doesn\'t exist');
+    return res.status(203).send('User doesn\'t exist');
   else {
     user.gender = gender;
     user.age = age;
@@ -84,10 +84,10 @@ router.post('/uploadPicture', checkLog(), asyncHandler(async(req, res) => {
   if (req.files)
     image = req.files.myFile;
   if (!image || isNaN(number) || number < 0 || number > 5)
-    return res.status(400).send('No image was found');
+    return res.status(203).send('No image was found');
   let user = await User.findOne({_id: userId});
   if (!user)
-    return res.status(400).send('User doesn\'t exist');
+    return res.status(203).send('User doesn\'t exist');
   let images = [
     user.picture1,
     user.picture2,
@@ -119,10 +119,10 @@ router.post('/deletePicture', checkLog(), asyncHandler(async(req, res) => {
   let userId = req.user;
   let number = parseInt(req.body.number);
   if (isNaN(number) || number < 0 || number > 5)
-    return res.status(400).send('MESSAGE');
+    return res.status(203).send('MESSAGE');
   let user = await User.findOne({_id: userId});
   if (!user)
-    return res.status(400).send('User doesn\'t exist');
+    return res.status(203).send('User doesn\'t exist');
   let images = [
     user.picture1,
     user.picture2,
@@ -131,7 +131,7 @@ router.post('/deletePicture', checkLog(), asyncHandler(async(req, res) => {
     user.picture5
   ];
   if (images[number] === "images/default.jpg")
-    return res.status(400).send('MESSAGE');
+    return res.status(203).send('MESSAGE');
   else if (fs.existsSync("public/" + images[number]))
     fs.unlinkSync("public/" + images[number]);
   images[number] = "images/default.jpg";

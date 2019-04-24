@@ -58,7 +58,7 @@
           </div>
         </div>
         <div v-for="user in suggestions" class="suggestions-profil">
-          <div class="suggestions-profil-picture" @click="showUser(user); checkIfBlocked(); sendNotification()" v-bind:style="{ backgroundImage: 'url(' + apiURL + user.picture1 + ')' }">
+          <div class="suggestions-profil-picture" @click="showUser(user); checkIfBlocked();" v-bind:style="{ backgroundImage: 'url(' + apiURL + user.picture1 + ')' }">
           </div>
           <h3>{{user.firstName}} {{user.lastName}}, {{user.age}}</h3>
         </div>
@@ -185,7 +185,12 @@ export default {
       this.$http.post('getSuggestions', {
         token: this.token
       }, {emulateJSON: true}).then((res) => {
-        this.suggestions = res.body
+        if (res.status == 203) {
+          this.error = res.body
+          this.showError = true
+        } else {
+          this.suggestions = res.body
+        }
       }, (err) => {
         this.error = err
         this.showError = true
@@ -203,7 +208,12 @@ export default {
         tag2: this.tag2,
         tag3: this.tag3
       }, {emulateJSON: true}).then((res) => {
-        this.suggestions = res.body
+        if (res.status == 203) {
+          this.error = res.body
+          this.showError = true
+        } else {
+          this.suggestions = res.body
+        }
       }, (err) => {
         this.error = err
         this.showError = true
@@ -215,10 +225,15 @@ export default {
         token : this.token,
         receiver : this.userToShow._id
       }, {emulateJSON: true}).then((res) => {
-        this.liked = res.body
-        this.popup = true
-        this.notification = this.user.firstName + ' has looked at your profil'
-        this.sendNotification();
+        if (res.status == 203) {
+          this.error = res.body
+          this.showError = true
+        } else {
+          this.liked = res.body
+          this.popup = true
+          this.notification = this.user.firstName + ' looked your profil'
+          this.sendNotification();
+        }
       }, (err) => {
         this.error = err
         this.showError = true
@@ -236,14 +251,19 @@ export default {
         token : this.token,
         receiver : this.userToShow._id
       }, {emulateJSON: true}).then((res) => {
-        this.liked = res.body
-        if (this.liked === 'true') {
-          this.checkIfMatch()
-          this.notification = this.user.firstName + ' has liked your profil!'
-          this.sendNotification()
+        if (res.status == 203) {
+          this.error = res.body
+          this.showError = true
         } else {
-          this.notification = this.user.firstName + ' has unliked you'
-          this.sendNotification()
+          this.liked = res.body
+          if (this.liked === 'true') {
+            this.checkIfMatch()
+            this.notification = this.user.firstName + ' liked you!'
+            this.sendNotification()
+          } else {
+            this.notification = this.user.firstName + ' has unliked you'
+            this.sendNotification()
+          }
         }
       }, (err) => {
         this.error = err
@@ -255,7 +275,13 @@ export default {
       token: this.token,
       userToBlock: this.userToShow._id
     }, {emulateJSON: true}).then((res) => {
-      this.blocked = res.body
+      if (res.status == 203) {
+        this.error = res.body
+        this.showError = true
+      }
+      else {
+        this.blocked = res.body
+      }
     }, (err) => {
       this.error = err
       this.showError = true
@@ -266,7 +292,12 @@ export default {
         token: this.token,
         userBlocked: this.userToShow._id
       }, {emulateJSON: true}).then((res) => {
-        this.blocked = res.body
+        if (res.status == 203) {
+          this.error = res.body
+          this.showError = true
+        } else {
+          this.blocked = res.body
+        }
       }, (err) => {
         this.error = err
         this.showError = true
@@ -277,10 +308,14 @@ export default {
       token : this.token,
       receiver : this.userToShow._id
     }, {emulateJSON: true}).then((res) => {
-        if (res.body == 'match') {
-        this.itsAMatch = true
-        this.notification = 'You matched with ' + this.userToShow.firstName + '!'
-        this.sendNotification();
+      if (res.status == 203) {
+        this.error = res.body
+        this.showError = true
+      }
+      else if (res.body == 'match') {
+      this.itsAMatch = true
+      this.notification = 'You matched with ' + this.userToShow.firstName + '!'
+      this.sendNotification();
       }
     }, (err) => {
       this.error = err
@@ -293,7 +328,12 @@ export default {
        receiver: this.userToShow._id,
        text: this.notification
      }, {emulateJSON: true}).then((res) => {
-       this.showError = false
+       if (res.status == 203) {
+         this.error = res.body
+         this.showError = true
+       } else {
+         this.showError = false
+       }
      }, (err) => {
        this.error = err
        this.showError = true

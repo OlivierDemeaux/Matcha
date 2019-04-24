@@ -12,10 +12,10 @@ router.post('/block', checkLog(), asyncHandler(async(req, res) => {
   let userId = req.user;
   let receiver = req.body.receiver;
   if (!receiver || !ObjectId.isValid(receiver))
-    return res.status(400).send('Error');
+    return res.status(203).send('Error');
   receiver = await UserModel.findOne({_id: receiver});
   if (!receiver)
-    return res.status(400).send('User doesn\'t exist');
+    return res.status(203).send('User doesn\'t exist');
   let block = await blockModel.find({blocker: userId, blocked: receiver._id});
   if (block)
     await block.remove();

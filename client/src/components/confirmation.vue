@@ -22,6 +22,13 @@ export default {
         token: token
       }, {emulateJSON: true}).then((res) => {
         this.success = res.body + ".   You may login now";
+        if (res.status == 203) {
+          this.error = res.body
+          this.showError = true
+        }
+        else {
+        this.success = res.body + ".   You may login now";
+      }
       }, (err) => {
         this.error = err.body;
       })
